@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # ✏️ 사이트 주소는 '주소 바꾸기.bat' 으로 한 번에 바뀌어요
-Sitemap: https://www.example.com/sitemap.xml
+Sitemap: https://ongi-coffee-homepage.vercel.app/sitemap.xml
