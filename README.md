@@ -34,7 +34,7 @@
 
 ### ⚡ 속도
 - [x] 코드 전체(HTML + CSS + JS)가 약 **92KB**예요
-- [x] 휴대폰 첫 화면 배너 사진은 약 **50KB**예요. 사진 15장을 모두 합쳐도 약 **0.8MB**예요
+- [x] 휴대폰 첫 화면 배너 사진은 약 **150KB**예요. 사진 15장을 모두 합치면 약 **2.5MB**예요 (한 장에 300KB 이하)
 - [x] 배너 사진을 가장 먼저 받고, 아래쪽 사진은 화면에 가까워질 때 불러와요(지연 로딩)
 - [x] 글꼴이 도착하기 전에도 기본 글꼴로 화면을 먼저 보여 줘요
 
@@ -147,6 +147,32 @@ cafe-homepage/
 
 ### 저작권
 직접 찍은 사진이 가장 안전해요. 무료 사진은 [Unsplash](https://unsplash.com), [Pexels](https://www.pexels.com)처럼 상업적으로 써도 되는 곳에서 받고, 사진마다 라이선스를 한 번씩 확인해 주세요.
+
+### 지금 들어 있는 사진의 출처
+지금 사이트의 사진 15장은 모두 **Unsplash 무료 사진**이에요. 유료인 Unsplash+ 사진은 쓰지 않았어요.
+- **라이선스:** [Unsplash License](https://unsplash.com/license). 상업적으로 써도 되고 출처 표기 의무는 없지만, 기록으로 남겨 둬요.
+- **확인한 날:** 2026-11-21. 사진 페이지마다 "Free to use under the Unsplash License"를 확인했어요.
+- **가공:** 사이트 비율에 맞게 잘라서(크롭) 썼어요.
+- **고른 기준:** 알아볼 수 있는 사람 얼굴, 다른 가게의 간판·상호·로고·컵 브랜드가 보이는 사진은 뺐어요.
+
+| 파일 | 사진 | 작가 | 원본 페이지 |
+|---|---|---|---|
+| `hero.jpg` · `hero-mobile.jpg` | 창가 테이블의 스탠드 조명 | [Juzzepo](https://unsplash.com/@juzzepo) | [보기](https://unsplash.com/photos/a-table-with-a-lamp-and-chairs-by-a-window-SNy0Diwv0vI) |
+| `about.jpg` | 햇살 드는 원목 벽과 화분 | [Volodymyr Dobrovolskyy](https://unsplash.com/@vladimir_d) | [보기](https://unsplash.com/photos/a-room-with-a-bunch-of-chairs-and-tables-4lZyKFyzmWw) |
+| `menu/menu-01.jpg` | 드리퍼에 물 붓는 핸드드립 | [Nadia Valko](https://unsplash.com/@nadiavalko) | [보기](https://unsplash.com/photos/pouring-hot-water-over-coffee-grounds-in-a-pour-over-brewer-F0XGFD9Z1Uk) |
+| `menu/menu-02.jpg` | 김이 나는 커피 한 잔 | [Charmil Gandhi](https://unsplash.com/@19darkshadow98) | [보기](https://unsplash.com/photos/steaming-cup-of-coffee-on-a-wooden-table-MK60jE_6zXU) |
+| `menu/menu-03.jpg` | 라테 아트 | [nameless 3791](https://unsplash.com/@unidentifieduser) | [보기](https://unsplash.com/photos/a-cup-of-coffee-with-latte-art-on-a-saucer-5nYLHK68TLM) |
+| `menu/menu-04.jpg` | 바스크 치즈케이크 | [Luna Hu](https://unsplash.com/@hyue) | [보기](https://unsplash.com/photos/a-cheesecake-on-a-wooden-cutting-board-with-a-knife-Qv86wgHErmc) |
+| `menu/menu-05.jpg` | 스콘과 크림·잼 | [Alexander Schimmeck](https://unsplash.com/@alschim) | [보기](https://unsplash.com/photos/scone-with-jam-and-cream-on-a-wooden-table-K2nQUurKss8) |
+| `menu/menu-06.jpg` | 초콜릿 휘낭시에 | [Harrison Chang](https://unsplash.com/@harrisonchang) | [보기](https://unsplash.com/photos/q9K5VxJP6JA) |
+| `gallery/gallery-01.jpg` | 햇살 드는 열린 창가 | [Khanh Do](https://unsplash.com/@donguyenkhanhs) | [보기](https://unsplash.com/photos/table-by-an-open-window-overlooking-a-garden-lFEkoe-gWkk) |
+| `gallery/gallery-02.jpg` | 드립 스테이션 | [Eiliv Aceron](https://unsplash.com/@shootdelicious) | [보기](https://unsplash.com/photos/person-pouring-water-in-clear-glass-jar-XP5zW2ngk9w) |
+| `gallery/gallery-03.jpg` | 머그에 커피 따르는 손 | [Jakob Owens](https://unsplash.com/@jakobowens1) | [보기](https://unsplash.com/photos/person-pouring-tea-on-black-ceramic-mug-sXmrTBMkj7M) |
+| `gallery/gallery-04.jpg` | 과일 타르트 진열 | [Natalia Y.](https://unsplash.com/@foxfox) | [보기](https://unsplash.com/photos/pastries-in-display-cabinet-o9kswzHrvMs) |
+| `gallery/gallery-05.jpg` | 조명 켜진 안쪽 공간 | [Roman](https://unsplash.com/@rm_reins) | [보기](https://unsplash.com/photos/cozy-cafe-interior-with-plants-and-tables-K3QN8cdLgyk) |
+| `gallery/gallery-06.jpg` | 아치형 붉은 나무 문 | [Handy Wicaksono](https://unsplash.com/@handywicaksono) | [보기](https://unsplash.com/photos/closed-brown-wooden-panel-door-PB4CWLheZHU) |
+
+> 공유 미리보기 사진(`og-image.jpg`)은 직접 만든 그림이라 이 목록에 없어요.
 
 ---
 
