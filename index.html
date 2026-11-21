@@ -98,6 +98,8 @@
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
     <symbol id="i-prev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
     <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></symbol>
   </svg>
 
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -410,35 +412,116 @@
         <div class="cta-box reveal">
           <p class="eyebrow eyebrow--light">RESERVATION</p>
           <h2 class="section-title">자리 예약 · 디저트 미리 주문</h2>
-          <p class="cta-box__desc">단체 방문이나 홀케이크·디저트 박스 예약은 전화나 카카오톡으로 편하게 문의해 주세요.</p>
+          <p class="cta-box__desc">아래 폼으로 예약 요청을 남겨 주시면 확인 후 연락드려요. 9명 이상 단체나 홀케이크·디저트 박스 예약은 전화로 문의해 주세요.</p>
 
           <!--
-            ✏️ 예약/문의 버튼 링크 바꾸는 법 ─────────────────────────────
-            · 지금 카카오톡 버튼은 href="#" (링크 비어 있음)이라, 누르면 '준비 중' 안내가 떠요.
-            · 카카오톡 채널을 만들었다면
-                href="#"  →  href="https://pf.kakao.com/_채널ID/chat"
-            · 구글 폼으로 바꾸려면
-                href="#"  →  href="https://forms.gle/내폼주소"
-                버튼 글자 '카카오톡으로 문의하기' → '온라인 예약하기'
-            · 직접 만든 예약 페이지(예: reservation.html)라면
-                href="#"  →  href="reservation.html"  (그리고 target="_blank" 는 지워도 돼요)
-            · 링크를 넣고 나면 data-link-pending="..." 은 그대로 둬도 괜찮아요.
-              (링크가 # 일 때만 안내가 떠요)
-            · 상단 메뉴의 '예약·문의'와 휴대폰 하단 고정 버튼은 모두 이 섹션으로 이동하므로
-              여기만 바꾸면 됩니다.
+            ✏️ 예약 폼 ─────────────────────────────────────────────
+            · 보낸 내용은 구글시트에 저장되고 사장님 메일로 알림이 가요. (README '예약 폼' 참고)
+            · 예약 시간·인원·기간, 구글 웹 앱 주소는 js/main.js 맨 위 RESERVATION 에서 바꿔요.
+            · JavaScript가 꺼진 브라우저에서는 폼이 숨겨지고 아래 전화 버튼만 보여요.
             ──────────────────────────────────────────────────────────
           -->
+          <div class="reserve" data-reserve hidden>
+            <div class="reserve__demo" role="note">
+              <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+              <p><strong>데모용 예약 폼입니다.</strong> 실제 개인정보를 입력하지 마세요.</p>
+            </div>
+
+            <form class="reserve-form" novalidate data-reserve-form>
+              <p class="reserve-form__hint"><span aria-hidden="true">*</span> 표시는 꼭 입력해야 하는 항목이에요.</p>
+
+              <div class="field">
+                <label class="field__label" for="rv-name">이름 <span class="field__req" aria-hidden="true">*</span></label>
+                <input class="field__input" id="rv-name" name="name" type="text" autocomplete="name" maxlength="20" required aria-describedby="rv-name-err">
+                <p class="field__error" id="rv-name-err" data-error-for="name"></p>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="rv-phone">연락처 <span class="field__req" aria-hidden="true">*</span></label>
+                <input class="field__input" id="rv-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="010-1234-5678" required aria-describedby="rv-phone-err">
+                <p class="field__error" id="rv-phone-err" data-error-for="phone"></p>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field__label" for="rv-date">방문 날짜 <span class="field__req" aria-hidden="true">*</span></label>
+                  <select class="field__input" id="rv-date" name="date" required aria-describedby="rv-date-hint rv-date-err" data-reserve-date>
+                    <option value="">날짜 선택</option>
+                  </select>
+                  <p class="field__hint" id="rv-date-hint">월요일은 쉬어요</p>
+                  <p class="field__error" id="rv-date-err" data-error-for="date"></p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="rv-time">시간 <span class="field__req" aria-hidden="true">*</span></label>
+                  <select class="field__input" id="rv-time" name="time" required aria-describedby="rv-time-hint rv-time-err" data-reserve-time>
+                    <option value="">시간 선택</option>
+                  </select>
+                  <p class="field__hint" id="rv-time-hint">마감 1시간 전까지</p>
+                  <p class="field__error" id="rv-time-err" data-error-for="time"></p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="rv-people">인원 <span class="field__req" aria-hidden="true">*</span></label>
+                  <select class="field__input" id="rv-people" name="people" required aria-describedby="rv-people-hint rv-people-err" data-reserve-people>
+                    <option value="">인원 선택</option>
+                  </select>
+                  <p class="field__hint" id="rv-people-hint">9명 이상은 전화로</p>
+                  <p class="field__error" id="rv-people-err" data-error-for="people"></p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="rv-request">요청사항 <span class="field__optional">(선택)</span></label>
+                <textarea class="field__input field__input--area" id="rv-request" name="request" rows="3" maxlength="200" placeholder="예: 창가 자리, 유아 의자 필요" aria-describedby="rv-request-count rv-request-err" data-reserve-request></textarea>
+                <p class="field__hint field__hint--count" id="rv-request-count" data-reserve-count>0 / 200자</p>
+                <p class="field__error" id="rv-request-err" data-error-for="request"></p>
+              </div>
+
+              <div class="field field--consent">
+                <div class="consent">
+                  <input class="consent__box" id="rv-consent" name="consent" type="checkbox" value="yes" required aria-describedby="rv-consent-err">
+                  <label class="consent__label" for="rv-consent">개인정보 수집·이용에 동의합니다 <span class="field__req-text">(필수)</span></label>
+                </div>
+                <!-- ✏️ 보유 기간(30일)은 apps-script/Code.gs 의 RETENTION_DAYS 와 맞춰 주세요 -->
+                <details class="consent__details">
+                  <summary>수집·이용 내용 보기</summary>
+                  <dl class="consent__list">
+                    <div><dt>수집 항목</dt><dd>이름, 연락처, 방문 날짜·시간, 인원, 요청사항</dd></div>
+                    <div><dt>이용 목적</dt><dd>예약 확인 및 방문 안내 연락</dd></div>
+                    <div><dt>보유 기간</dt><dd>방문일로부터 30일이 지나면 자동으로 삭제</dd></div>
+                    <div><dt>동의 거부</dt><dd>동의하지 않을 수 있으며, 이 경우 온라인 예약 대신 전화로 예약할 수 있어요.</dd></div>
+                  </dl>
+                </details>
+                <p class="field__error" id="rv-consent-err" data-error-for="consent"></p>
+              </div>
+
+              <!-- 스팸 방지용 함정 칸: 사람에게는 보이지 않아요. 지우지 마세요. -->
+              <div class="reserve-form__trap" aria-hidden="true">
+                <label for="rv-website">웹사이트 (비워 두세요)</label>
+                <input id="rv-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="reserve-alert" role="alert" data-reserve-alert></div>
+
+              <button class="btn btn--primary reserve-form__submit" type="submit" data-reserve-submit>예약 요청 보내기</button>
+            </form>
+
+            <div class="reserve-done" data-reserve-done hidden>
+              <svg class="icon reserve-done__icon" aria-hidden="true"><use href="#i-check"/></svg>
+              <h3 class="reserve-done__title" tabindex="-1" data-reserve-done-title>예약 요청이 접수됐어요</h3>
+              <p class="reserve-done__desc" data-reserve-done-desc></p>
+              <dl class="reserve-done__summary" data-reserve-summary></dl>
+              <p class="reserve-done__note">매장에서 확인한 뒤 연락드려요. (데모 폼이라 실제 연락은 가지 않아요)</p>
+              <button class="btn btn--outline btn--sm" type="button" data-reserve-again>다른 예약 하기</button>
+            </div>
+          </div>
+
           <div class="cta-box__actions">
             <!-- ✏️ 전화 버튼: tel: 뒤 숫자를 실제 번호로 -->
             <a class="btn btn--cream" href="tel:020000000">
-              <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>전화로 문의하기
+              <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>전화로 예약하기
             </a>
-            <!-- ✏️ 카카오톡(또는 구글 폼 / 예약 폼) 버튼: 위 안내대로 href="#" 를 바꾸세요 -->
-            <a class="btn btn--outline-light" href="#" target="_blank" rel="noopener" data-link-pending="카카오톡 채널은 아직 준비 중이에요. 전화로 문의해 주세요.">
-              <svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>카카오톡으로 문의하기
-            <span class="sr-only">(새 창)</span></a>
           </div>
-          <p class="cta-box__note">영업시간(화–일 10:00–21:00) 중에 순서대로 답변드려요.</p>
+          <p class="cta-box__note">전화 예약은 영업시간(화–일 10:00–21:00)에 받아요.</p>
         </div>
       </div>
     </section>
