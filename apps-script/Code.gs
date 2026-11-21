@@ -63,6 +63,10 @@ const STATUS = ['대기', '확정', '취소'];
 const HEADERS = ['접수번호', '접수 시각', '처리 상태', '이름', '연락처', '방문 날짜', '방문 시간', '인원', '요청사항', '개인정보 동의', '사장님 메모'];
 const COL = { STATUS: 3, VISIT_DATE: 6 }; // 1부터 세는 열 번호
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
+// 글자 방향을 뒤집는 문자: 시트·메일에서 내용이 엉뚱하게 보이게 할 수 있어서 지워요
+const BIDI = /[\u202A-\u202E\u2066-\u2069]/g;
+// 눈에 안 보이는 글자: 이것만으로 된 이름은 막아요 (이모지를 잇는 글자(U+200D)는 저장할 때 지우지 않아요)
+const INVISIBLE = /[\s\u00AD\u115F\u1160\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\u3164\uFEFF\uFFA0]/g;
 
 
 /* ===================== 1. 홈페이지 → 예약 접수 ===================== */
@@ -134,11 +138,13 @@ function validate_(p) {
   const now = now_();
 
   // 이름
-  const name = clean_(p.name).replace(/\s+/g, ' ');
-  if (name.length < 1 || name.length > CONFIG.NAME_MAX) return { error: 'name' };
+  const name = clean_(p.name).replace(BIDI, '').replace(/\s+/g, ' ').trim();
+  if (name.replace(INVISIBLE, '').length < 1 || name.length > CONFIG.NAME_MAX) return { error: 'name' };
 
   // 연락처: 숫자만 남겨서 0으로 시작하는 9~11자리
-  const phoneDigits = String(p.phone || '').replace(/\D/g, '');
+  const phoneDigits = String(p.phone || '')
+    .replace(/[\uFF10-\uFF19]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }) // 전각 숫자
+    .replace(/\D/g, '');
   if (!/^0\d{8,10}$/.test(phoneDigits)) return { error: 'phone' };
 
   // 방문 날짜: 실제 있는 날짜 / 오늘 ~ 30일 뒤 / 휴무일 아님
@@ -175,6 +181,7 @@ function validate_(p) {
   const request = String(p.request || '')
     .replace(/\r\n?/g, '\n')
     .replace(/[\u0000-\u0009\u000B-\u001F\u007F]/g, '')
+    .replace(BIDI, '')
     .trim();
   if (request.length > CONFIG.REQUEST_MAX) return { error: 'request' };
 

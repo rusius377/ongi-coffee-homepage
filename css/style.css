@@ -721,13 +721,13 @@ select.field__input {
 .consent { display: flex; align-items: flex-start; gap: 10px; }
 .consent__box {
   flex-shrink: 0;
-  width: 22px; height: 22px;
-  margin: 2px 0 0;
+  width: 24px; height: 24px;        /* 누르는 곳 최소 24px (WCAG 2.5.8) */
+  margin: 1px 0 0;
   accent-color: var(--color-primary);
   cursor: pointer;
 }
 .consent__label { font-weight: 700; cursor: pointer; }
-.consent__details { margin: 8px 0 0 32px; font-size: 14px; }
+.consent__details { margin: 8px 0 0 34px; font-size: 14px; }
 .consent__details summary {
   display: inline-block;
   padding: 4px 0;

@@ -286,6 +286,20 @@ const RESERVATION = {
     const pad = (n) => String(n).padStart(2, '0');
     const toHHMM = (min) => `${pad(Math.floor(min / 60))}:${pad(min % 60)}`;
     const digitsOf = (text) => text.replace(/\D/g, '');
+    // 전각 숫자(０１０)·여러 가지 줄표(－ – —)를 보통 숫자와 하이픈으로
+    const toHalfWidth = (text) => text
+      .replace(/[\uFF10-\uFF19]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/[\uFF0D\u2010-\u2015\u2212]/g, '-');
+    // 눈에 안 보이는 글자(폭 없는 공백, 글자 방향 문자, 한글 채움 문자 등) — 이것만으로 된 이름은 막아요
+    // (apps-script/Code.gs 의 INVISIBLE 과 같은 목록)
+    const INVISIBLE = /[\s\u00AD\u115F\u1160\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\u3164\uFEFF\uFFA0]/g;
+
+    // 오류 칸·안내로 이동: 화면 가운데로 스크롤 (아이폰은 상단 고정 헤더를 고려하지 않아서 직접 맞춰요)
+    function focusAndReveal(el) {
+      el.focus({ preventScroll: true });
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({ block: 'center', behavior: smooth ? 'smooth' : 'auto' });
+    }
 
     // --- 예약 가능한 날짜·시간 계산 (한국 시간 기준) ---
     function slotsFor(offset, now) {
@@ -400,7 +414,7 @@ const RESERVATION = {
     function collect() {
       return {
         name: form.elements.namedItem('name').value.trim().replace(/\s+/g, ' '),
-        phone: form.elements.namedItem('phone').value.trim(),
+        phone: toHalfWidth(form.elements.namedItem('phone').value).trim(),
         date: dateSel.value,
         time: timeSel.value,
         people: peopleSel.value,
@@ -411,7 +425,7 @@ const RESERVATION = {
 
     function validate(data) {
       const errors = {};
-      if (!data.name) errors.name = MESSAGES.name;
+      if (!data.name.replace(INVISIBLE, '')) errors.name = MESSAGES.name;
       if (!/^0\d{8,10}$/.test(digitsOf(data.phone))) errors.phone = MESSAGES.phone;
       // 폼을 오래 열어 둔 사이 날짜·시간이 지났는지 다시 확인
       const selDate = data.date;
@@ -477,7 +491,7 @@ const RESERVATION = {
         });
       form.hidden = true;
       done.hidden = false;
-      doneTitle.focus();
+      focusAndReveal(doneTitle);
     }
 
     // --- 제출 ---
@@ -492,7 +506,7 @@ const RESERVATION = {
       Object.keys(errors).forEach((f) => setError(f, errors[f]));
       const firstBad = Object.keys(MESSAGES).find((f) => errors[f]);
       if (firstBad) {
-        form.elements.namedItem(firstBad).focus();
+        focusAndReveal(form.elements.namedItem(firstBad));
         return;
       }
 
@@ -526,7 +540,7 @@ const RESERVATION = {
           refreshChoices();
           const gone = { date: MESSAGES.dateGone, time: MESSAGES.timeGone }[result.field];
           setError(result.field, gone || MESSAGES[result.field]);
-          form.elements.namedItem(result.field).focus();
+          focusAndReveal(form.elements.namedItem(result.field));
         } else {
           showFailure('failed');
         }
@@ -545,7 +559,7 @@ const RESERVATION = {
       countEl.textContent = '0 / 200자';
       done.hidden = true;
       form.hidden = false;
-      form.elements.namedItem('name').focus();
+      focusAndReveal(form.elements.namedItem('name'));
     });
 
     root.hidden = false; // JavaScript가 켜져 있을 때만 폼을 보여 줘요
